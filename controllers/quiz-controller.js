@@ -12,3 +12,8 @@ exports.answer = function (req, res) {
         res.render("quizes/answer", {respuesta: "Incorrecto"});
     }
 }
+
+exports.creditos = function (req, res) {
+    
+    res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"} });
+};
