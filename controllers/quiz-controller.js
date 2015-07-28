@@ -1,25 +1,41 @@
 var models = require('../models/models.js');
 
-exports.question = function (req, res) {
-    models.Quiz.findAll().then(
+
+exports.load = function(req, res, next, quizId) {
+    console.log('cargamos pregunta:' + quizId);
+    models.Quiz.find(quizId).then(
         function (quiz) {
-            res.render('quizes/question', {pregunta: quiz[0].pregunta});
+            if (quiz) {
+                req.quiz = quiz;
+                next();
+            }
         }
-    );
+    ).catch(function(error){next(error)});
+}
+
+exports.index = function (req, res) {
+    models.Quiz.findAll().then (
+        function(quizes) {
+            res.render('quizes/index', {quizes:quizes});
+        }
+    ).catch(function (error){next(error)});
+}
+
+
+exports.show = function (req, res) {
+    res.render('quizes/show', {quiz: req.quiz});
 };
 
 
 exports.answer = function (req, res) {
     console.log("LLEGA quiz-controller asnswer");
-    models.Quiz.findAll().then(
-        function(quiz) {
-            if (req.query.respuesta === quiz[0].respuesta) {
-                res.render("quizes/answer", {respuesta: "Correcto"});
-            } else {
-                res.render("quizes/answer", {respuesta: "Incorrecto"});
-            }
-        }
-    );
+    if (req.query.respuesta === req.quiz.respuesta) {
+        res.render("quizes/answer", {respuesta: "Correcto", quiz: req.quiz});
+    } else {
+        res.render("quizes/answer", {respuesta: "Incorrecto", quiz: req.quiz});
+    }
+        
+   
     
     
 }
