@@ -1,8 +1,16 @@
+<form method="get" action="/quizes">
+    
+    Busqueda pregunta: <input type="text" name="search" onfocus="true"/></br>
+    <input type="submit" value="Buscar"/>
+
+</form>
+
+
+
 <% var i; for (i=0; i < quizes.length; i++) { %>
 
 
-
-<p><a href="/quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></p>
+<p><a href="/quizes/<%= quizes[i].id %>"/><%= quizes[i].pregunta %></p>
 
 
 

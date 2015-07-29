@@ -14,11 +14,19 @@ exports.load = function(req, res, next, quizId) {
 }
 
 exports.index = function (req, res) {
-    models.Quiz.findAll().then (
-        function(quizes) {
-            res.render('quizes/index', {quizes:quizes});
-        }
+    
+    var cadenaBusqueda = "%";
+    
+    if (req.query.search) {
+        cadenaBusqueda += req.query.search.trim().replace(/ /g, '%') + '%';
+    }
+    
+    console.log("Cadena de busqueda: " + cadenaBusqueda);
+    models.Quiz.findAll({where: ["pregunta like ?", cadenaBusqueda]}).then (
+            function(quizes) {res.render('quizes/index', {quizes:quizes});}
     ).catch(function (error){next(error)});
+    
+    
 }
 
 
