@@ -42,11 +42,38 @@ exports.answer = function (req, res) {
     } else {
         res.render("quizes/answer", {respuesta: "Incorrecto", quiz: req.quiz});
     }
-        
-   
+    
+};
+
+
+exports.new = function (req, res) {
+    console.log("entramos en new");
+    var quiz = models.Quiz.build (
+        {pregunta: "Pregunta", respuesta: "Respuesta"}
+    );
+    res.render('quizes/new', {quiz: quiz});
+};
+
+
+exports.create = function (req, res) {
+    var quiz = models.Quiz.build (
+        req.body.quiz
+    );
+    console.log("Pregunta: " + quiz.pregunta);
+    console.log("Respuesta: " + quiz.respuesta);
+    quiz.save(
+        {fields:["pregunta", "respuesta"]}
+    ).then(function(){
+        console.log("Redireccionamos");
+        res.redirect('/quizes');
+    })
     
     
-}
+};
+
+
+
+
 
 exports.creditos = function (req, res) {
     
