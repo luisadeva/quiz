@@ -26,6 +26,7 @@ router.get("/quizes/:quizId/answer", quizController.answer);
 
 router.get("/quizes/:quizId/edit", quizController.edit);
 router.put("/quizes/:quizId", quizController.update);
+router.delete("/quizes/:quizId", quizController.destroy);
 
 
 router.get("/author", quizController.creditos);

@@ -84,6 +84,18 @@ exports.creditos = function (req, res) {
     res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"} });
 };
 
+exports.destroy = function (req, res) {
+    req.quiz.destroy().then(
+		function() {res.redirect('/quizes')}
+	
+	).catch(
+		function(error) {
+			next(error);
+		}
+	);
+    
+};
+
 
 
 exports.edit = function (req, res) {
