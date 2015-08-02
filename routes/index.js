@@ -18,10 +18,15 @@ router.post("/quizes/create", quizController.create);
 
 
 
+
 router.get("/quizes", quizController.index);
 router.param('quizId', quizController.load);
 router.get("/quizes/:quizId", quizController.show);
 router.get("/quizes/:quizId/answer", quizController.answer);
+
+router.get("/quizes/:quizId/edit", quizController.edit);
+router.put("/quizes/:quizId", quizController.update);
+
 
 router.get("/author", quizController.creditos);
 

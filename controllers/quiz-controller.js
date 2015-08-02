@@ -8,7 +8,10 @@ exports.load = function(req, res, next, quizId) {
             if (quiz) {
                 req.quiz = quiz;
                 next();
-            }
+            } else {
+				next(new Error('No existe quizId=' + quizId))
+			}
+			
         }
     ).catch(function(error){next(error)});
 }
@@ -55,13 +58,10 @@ exports.new = function (req, res) {
 };
 
 
-exports.create = function (req, res) {
-    var quiz = models.Quiz.build (
-        req.body.quiz
-    );
-    console.log("Pregunta: " + quiz.pregunta);
-    console.log("Respuesta: " + quiz.respuesta);
-    quiz
+exports.create = function(req, res) {
+  var quiz = models.Quiz.build( req.body.quiz );
+
+  quiz
   .validate()
   .then(
     function(err){
@@ -73,12 +73,8 @@ exports.create = function (req, res) {
         .then( function(){ res.redirect('/quizes')}) 
       }      // res.redirect: Redirección HTTP a lista de preguntas
     }
-  );
-        
-    
-    
+  ).catch(function(error){next(error)});
 };
-
 
 
 
@@ -86,4 +82,38 @@ exports.create = function (req, res) {
 exports.creditos = function (req, res) {
     
     res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"} });
+};
+
+
+
+exports.edit = function (req, res) {
+    var quiz = req.quiz;
+	
+	res.render("quizes/edit", {quiz:quiz, errors:[]});
+	
+    res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"} });
+};
+
+
+exports.update = function (req, res) {
+	
+	req.quiz.pregunta = req.body.quiz.pregunta;
+	req.quiz.respuesta = req.body.quiz.respuesta;
+	
+
+	  req.quiz
+	  .validate()
+	  .then(
+		function(err){
+		  if (err) {
+			res.render('quizes/edit', {quiz: req.quiz, errors: err.errors});
+		  } else {
+			req.quiz // save: guarda en DB campos pregunta y respuesta de quiz
+			.save({fields: ["pregunta", "respuesta"]})
+			.then( function(){ res.redirect('/quizes')}) 
+		  }      // res.redirect: Redirección HTTP a lista de preguntas
+		}
+	  ).catch(function(error){next(error)});
+	
+	
 };
