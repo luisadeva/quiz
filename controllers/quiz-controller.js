@@ -69,7 +69,7 @@ exports.create = function(req, res) {
         res.render('quizes/new', {quiz: quiz, errors: err.errors});
       } else {
         quiz // save: guarda en DB campos pregunta y respuesta de quiz
-        .save({fields: ["pregunta", "respuesta"]})
+        .save({fields: ["pregunta", "respuesta", "tema"]})
         .then( function(){ res.redirect('/quizes')}) 
       }      // res.redirect: Redirección HTTP a lista de preguntas
     }
@@ -81,7 +81,7 @@ exports.create = function(req, res) {
 
 exports.creditos = function (req, res) {
     
-    res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"} });
+    res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"}, errors:[]});
 };
 
 exports.destroy = function (req, res) {
@@ -103,7 +103,6 @@ exports.edit = function (req, res) {
 	
 	res.render("quizes/edit", {quiz:quiz, errors:[]});
 	
-    res.render('author', {autor: {nombre: "Luis Adeva", email: "asdasd@asdasd", foto: "me.jpg"} });
 };
 
 
@@ -111,6 +110,7 @@ exports.update = function (req, res) {
 	
 	req.quiz.pregunta = req.body.quiz.pregunta;
 	req.quiz.respuesta = req.body.quiz.respuesta;
+	req.quiz.tema = req.body.quiz.tema;
 	
 
 	  req.quiz
@@ -121,7 +121,7 @@ exports.update = function (req, res) {
 			res.render('quizes/edit', {quiz: req.quiz, errors: err.errors});
 		  } else {
 			req.quiz // save: guarda en DB campos pregunta y respuesta de quiz
-			.save({fields: ["pregunta", "respuesta"]})
+			.save({fields: ["pregunta", "respuesta", "tema"]})
 			.then( function(){ res.redirect('/quizes')}) 
 		  }      // res.redirect: Redirección HTTP a lista de preguntas
 		}
@@ -129,3 +129,4 @@ exports.update = function (req, res) {
 	
 	
 };
+
