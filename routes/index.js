@@ -3,6 +3,7 @@ var router = express.Router();
 
 
 var quizController = require("../controllers/quiz-controller");
+var commentController = require("../controllers/comment-controller");
 
 
 /* GET home page. */
@@ -14,9 +15,8 @@ router.get("/quizes/new", quizController.new);
 router.post("/quizes/create", quizController.create);
 
 
-
-
-
+router.get("/quizes/:quizId/comments/new", commentController.new);
+router.post("/quizes/:quizId/comments", commentController.create);
 
 
 router.get("/quizes", quizController.index);

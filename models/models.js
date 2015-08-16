@@ -29,7 +29,13 @@ var sequelize = new Sequelize(DB_name, user, pwd,
 
 var Quiz = sequelize.import(path.join (__dirname, 'quiz'));
 
+var Comment = sequelize.import(path.join (__dirname, 'comment'));
+//Definimos las relaciones
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
+
 exports.Quiz = Quiz;
+exports.Comment = Comment;
 
 
 sequelize.sync().then(
