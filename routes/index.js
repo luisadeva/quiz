@@ -4,6 +4,8 @@ var router = express.Router();
 
 var quizController = require("../controllers/quiz-controller");
 var commentController = require("../controllers/comment-controller");
+var sessionController = require("../controllers/session-controller");
+var userController = require("../controllers/user-controller");
 
 
 /* GET home page. */
@@ -23,6 +25,10 @@ router.get("/quizes", quizController.index);
 router.param('quizId', quizController.load);
 router.get("/quizes/:quizId", quizController.show);
 router.get("/quizes/:quizId/answer", quizController.answer);
+
+router.get('/login', sessionController.new);
+router.post('/login', sessionController.create);
+router.get('/logout', sessionController.destroy); //destruir session, deberia ser delete
 
 router.get("/quizes/:quizId/edit", quizController.edit);
 router.put("/quizes/:quizId", quizController.update);

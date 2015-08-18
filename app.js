@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var partials = require('express-partials');
 var methodOverride = require('method-override');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 
@@ -21,10 +22,27 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
+app.use(cookieParser("Quiz"));
+app.use(session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(partials());
 app.use(methodOverride("_method"));
+
+
+app.use( function (req, res, next) {
+    console.log("configuramos la session");
+    //guardar el path en sesion.redir para despues de login
+    if (!req.path.match(/\/login|\/logout/)) {
+        req.session.redir=req.path;
+    }
+    
+    //hacer visible req.session en las vistas
+    res.locals.session = req.session;
+    next();
+    
+}
+);
+
 
 app.use('/', routes);
 
@@ -60,6 +78,7 @@ app.use(function(err, req, res, next) {
         errors:[]
     });
 });
+
 
 
 module.exports = app;
