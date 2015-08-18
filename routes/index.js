@@ -13,9 +13,11 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz' , errors:[]});
 });
 
-router.get("/quizes/new", quizController.new);
-router.post("/quizes/create", quizController.create);
-
+router.get("/quizes/new", sessionController.loginRequired, quizController.new);
+router.post("/quizes/create", sessionController.loginRequired, quizController.create);
+router.get("/quizes/:quizId/edit", sessionController.loginRequired, quizController.edit);
+router.put("/quizes/:quizId", sessionController.loginRequired, quizController.update);
+router.delete("/quizes/:quizId", sessionController.loginRequired, quizController.destroy);
 
 router.get("/quizes/:quizId/comments/new", commentController.new);
 router.post("/quizes/:quizId/comments", commentController.create);
@@ -30,9 +32,8 @@ router.get('/login', sessionController.new);
 router.post('/login', sessionController.create);
 router.get('/logout', sessionController.destroy); //destruir session, deberia ser delete
 
-router.get("/quizes/:quizId/edit", quizController.edit);
-router.put("/quizes/:quizId", quizController.update);
-router.delete("/quizes/:quizId", quizController.destroy);
+
+
 
 
 router.get("/author", quizController.creditos);
