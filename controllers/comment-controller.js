@@ -27,21 +27,30 @@ exports.create = function(req, res) {
 };
 
 
-exports.load = function(req, res, next, quizId) {
-    console.log('cargamos comentarios:' + quizId);
-    models.Quiz.find(
+exports.load = function(req, res, next, commnentId) {
+    console.log('cargamos comentario:' + commnentId);
+    models.Comment.find(
 		{
-			where: {id: Number(quizId)},
-			include: [{model: models.Comment}]
+			where: {id: Number(commnentId)}
 		}).then(
-        function (quiz) {
-            if (quiz) {
-                req.quiz = quiz;
+        function (comment) {
+            if (comment) {
+                req.comment = comment;
                 next();
             } else {
-				next(new Error('No existe quizId=' + quizId))
+				next(new Error('No existe commnentId=' + commnentId))
 			}
 			
         }
     ).catch(function(error){next(error)});
 };
+
+exports.publish = function(req, res) {
+    console.log("Comentario a publicar " + req.comment);
+    req.comment.publicado = true;
+
+  req.comment.save( {fields: ["publicado"]})
+    .then( function(){ res.redirect('/quizes/'+req.params.quizId);} )
+    .catch(function(error){next(error)});
+};
+
