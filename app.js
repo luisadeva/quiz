@@ -44,6 +44,52 @@ app.use( function (req, res, next) {
 );
 
 
+
+
+app.use ( function (req, res, next) {
+    
+    function minTranscurridos(inicio, fin){
+    
+        timeElapsed=fin.getTime()-inicio.getTime();
+        secsElapsed=0;
+
+        out="";
+        secsElapsed=Math.floor(timeElapsed/1000);
+        minElapsed=Math.floor(secsElapsed/60);
+        out+=minElapsed;
+
+        return out;
+    }
+    
+    
+    console.log("Auto-logout");
+    
+    if (req.session.user) {
+        
+        console.log("req.session.user.fechaLogin" + req.session.user.fechaLogin);
+        
+        
+        timeElapsed=new Date().getTime()-req.session.user.fechaLogin;
+        secsElapsed=0;
+
+        
+        secsElapsed=Math.floor(timeElapsed/1000);
+        minElapsed=Math.floor(secsElapsed/60);
+        var minutosTranscurridos=minElapsed;
+        
+        console.log(minutosTranscurridos);
+        
+        if (minutosTranscurridos>1) {
+            delete req.session.user;
+        }
+        
+    }
+    next();
+});
+
+
+
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
