@@ -48,20 +48,6 @@ app.use( function (req, res, next) {
 
 app.use ( function (req, res, next) {
     
-    function minTranscurridos(inicio, fin){
-    
-        timeElapsed=fin.getTime()-inicio.getTime();
-        secsElapsed=0;
-
-        out="";
-        secsElapsed=Math.floor(timeElapsed/1000);
-        minElapsed=Math.floor(secsElapsed/60);
-        out+=minElapsed;
-
-        return out;
-    }
-    
-    
     console.log("Auto-logout");
     
     if (req.session.user) {
@@ -81,6 +67,8 @@ app.use ( function (req, res, next) {
         
         if (minutosTranscurridos>1) {
             delete req.session.user;
+        } else {
+            req.session.user.fechaLogin = new Date().getTime();
         }
         
     }
